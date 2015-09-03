@@ -6,9 +6,13 @@ class NormalizedCounter(object):
 	Like collection.Counter but performs relative counts
 	"""
 
-	def __init__(self):
-		self.absolute_size = 0
-		self.counter = Counter()
+	def __init__(self, content = None):	
+		"""Constructor for the NormalizedCounter class
+
+		:param content: the string from which the counter will be initially constructed
+		"""
+		self.absolute_size = len(content) if content is not None else 0
+		self.counter = Counter(content)
 
 	def most_common(self, n = None):
 		pass
