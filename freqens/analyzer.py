@@ -36,4 +36,4 @@ class Analyzer(object):
 		scores = { string: self.score(string) for string in strings }
 
 		return heapq.nsmallest(n, scores.iteritems(), operator.itemgetter(1))
-
+ 
