@@ -1,6 +1,10 @@
 # encoding: utf-8
 from freqens.analyzer import Analyzer, counter_distance
 from freqens.normalized_counter import NormalizedCounter
+import os
+
+here = os.path.dirname(os.path.abspath(__file__))
+
 
 def counter_distance_test():
 	nc1 = NormalizedCounter()
@@ -49,14 +53,28 @@ def choose_best_test():
 
 	answers = analyzer.choose_best(strings, 4)
 
-	assert answers[0][0] == strings[0]
-	assert answers[1][0] == strings[3]
-	assert answers[2][0] == strings[2]
-	assert answers[3][0] == strings[1]
+	assert answers[0] == strings[0]
+	assert answers[1] == strings[3]
+	assert answers[2] == strings[2]
+	assert answers[3] == strings[1]
 
 	answer = analyzer.choose_best(strings)
 
 	assert len(answer) == 1
-	assert answers[0][0] == strings[0]
-	assert answers[0][1] == 0  # score
+	assert answers[0] == strings[0]
+
+
+def feed_from_raw_file_test():
+	analyzer = Analyzer()
+	analyzer.feed_from_raw_file(os.path.join(here, "data/sample-raw-file.txt"))
+
+	target = "Doth mother know you weareth her drapes?"
+
+	answer = analyzer.choose_best([
+		target,
+		"aergarg arogargath argnhotbno agrepaignar",
+		"argoarg atobhhola qoqrgn gr"
+	])
+
+	assert answer[0] == "Doth mother know you weareth her drapes?"
 
