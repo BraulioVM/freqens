@@ -65,10 +65,7 @@ class NormalizedCounter(object):
 
 
 	def __str__(self):
-		absolute_counter = dict(self.counter)
+		result_dict = dict( (key, counter[key]*1./self.absolute_size) for key in counter )
 
-		for key in absolute_counter:
-			absolute_counter[key] /= 1.0 * self.absolute_size 
-
-		return absolute_counter.__str__()
+		return result_dict.__str__()
 
