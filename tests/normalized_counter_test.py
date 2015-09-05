@@ -69,5 +69,15 @@ def counters_sum_test():
 	assert nc3["c"] == 2./9
 
 
+def absolute_counts_test():
+	nc = NormalizedCounter()
+	nc.insert("aaabbc")
+
+	absolute = nc.absolute_counts()
+
+	assert absolute["a"] == 3
+	assert absolute["b"] == 2
+	assert absolute["c"] == 1
+	assert len(absolute) == 3
 
 

@@ -58,14 +58,16 @@ class NormalizedCounter(object):
 		return self.counter.__iter__()	# an iterator over the keys
 
 	def iteritems(self):
-		return map(lambda p: (p[0], 1.* p[1] / self.absolute_size), self.counter.iteritems())
+		return ( (key, self[key]) for key in self )
 
 	def __contains__(self, key):
 		return self[key] > 0
 
+	def absolute_counts(self):
+		return dict( self.counter )
 
 	def __str__(self):
-		result_dict = dict( (key, counter[key]*1./self.absolute_size) for key in counter )
+		result_dict = dict( (key, self[key]) for key in self.counter )
 
 		return result_dict.__str__()
 
