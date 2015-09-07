@@ -1,6 +1,9 @@
 from collections import Counter
 from heapq import nlargest
 
+def calculate_counter_size(other):
+	return sum(other.values())
+
 class NormalizedCounter(object):
 	"""
 	Like collection.Counter but performs relative counts
@@ -24,12 +27,14 @@ class NormalizedCounter(object):
 		self.absolute_size += len(iterable)
 		self.counter.update(iterable)
 
+	def absolute_counts(self):
+		return dict( self.counter )
 
 	def __add__(self, other):
 		""" Performs an absolute sum of two NormalizedCounters """
 		result = NormalizedCounter()
 		if isinstance(other, Counter):
-			result.absolute_size = self.calculate_counter_size(other) + self.absolute_size
+			result.absolute_size = calculate_counter_size(other) + self.absolute_size
 			result.counter = other + self.counter
 		
 		elif isinstance(other, NormalizedCounter):
@@ -40,8 +45,7 @@ class NormalizedCounter(object):
 
 		return result
 
-	def calculate_counter_size(self, other):
-		return sum(other.values())
+	
 
 	def __len__(self):
 		""" Returns the number of distinct elements """
@@ -63,11 +67,8 @@ class NormalizedCounter(object):
 	def __contains__(self, key):
 		return self[key] > 0
 
-	def absolute_counts(self):
-		return dict( self.counter )
-
 	def __str__(self):
-		result_dict = dict( (key, self[key]) for key in self.counter )
+		result_dict = { key: self[key] for key in self.counter }
 
 		return result_dict.__str__()
 

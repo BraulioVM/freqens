@@ -88,6 +88,10 @@ def feed_from_raw_file_test():
 def delete_files():
 	os.remove(TEST_EXPORT_FILENAME)
 
+def files_equal(filename1, filename2):
+	with open(filename1) as f1, open(filename2) as f2:
+		return f1.read() == f2.read()
+
 @with_setup(None, delete_files)
 def store_test():
 	analyzer = Analyzer()
@@ -95,6 +99,11 @@ def store_test():
 
 	analyzer.store(TEST_EXPORT_FILENAME)
 
-	with open(TEST_EXPORT_FILENAME) as export, open(SAMPLE_EXPORT_FILENAME) as sample:
-		assert export.read() == sample.read()
+	assert files_equal(TEST_EXPORT_FILENAME, SAMPLE_EXPORT_FILENAME)
 
+@with_setup(None, delete_files)
+def load_test():
+	analyzer = Analyzer.load(SAMPLE_EXPORT_FILENAME)
+	analyzer.store(TEST_EXPORT_FILENAME)
+
+	assert files_equal(TEST_EXPORT_FILENAME, SAMPLE_EXPORT_FILENAME)
