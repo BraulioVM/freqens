@@ -48,12 +48,15 @@ class Analyzer(object):
 		scores = { string: self.score(string) for string in strings }
 
 		return map(operator.itemgetter(0), heapq.nsmallest(n, scores.iteritems(), operator.itemgetter(1)))
- 
-	def store(self, filename):
+
+	def serialize(self):
 		content = self.counter.absolute_counts()
 
+		return json.dumps(content)
+ 
+	def store(self, filename):
 		with open(filename, "w") as f:
-			f.write(json.dumps(content))
+			f.write(self.serialize())
 
 
 	@classmethod
