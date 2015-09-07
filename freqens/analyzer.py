@@ -1,16 +1,11 @@
 from freqens.normalized_counter import NormalizedCounter
 from itertools import chain
-import heapq, operator
-
-
+import heapq, operator, json
 
 def counter_distance(counter1, counter2):
 	keys = set( chain(counter1.elements(), counter2.elements()) ) 
 
-
 	return sum( (counter1[key] - counter2[key])**2 for key in keys )
-
-
 
 class Analyzer(object):
 	""" 
@@ -55,3 +50,9 @@ class Analyzer(object):
 
 		return map(operator.itemgetter(0), heapq.nsmallest(n, scores.iteritems(), operator.itemgetter(1)))
  
+	def store(self, filename):
+		content = self.counter.absolute_counts()
+
+		with open(filename, "w") as f:
+			f.write(json.dumps(content))
+		

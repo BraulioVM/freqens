@@ -1,10 +1,13 @@
 # encoding: utf-8
 from freqens.analyzer import Analyzer, counter_distance
 from freqens.normalized_counter import NormalizedCounter
+from nose.tools import with_setup
 import os
 
 here = os.path.dirname(os.path.abspath(__file__))
 
+def relative_path(path):
+	return os.path.join(here, path)
 
 def counter_distance_test():
 	nc1 = NormalizedCounter()
@@ -63,10 +66,13 @@ def choose_best_test():
 	assert len(answer) == 1
 	assert answers[0] == strings[0]
 
+SAMPLE_RAW_FILENAME = relative_path("data/sample-raw-file.txt")
+TEST_EXPORT_FILENAME = relative_path("data/export.txt")
+SAMPLE_EXPORT_FILENAME = relative_path("data/sample-export.txt")
 
 def feed_from_raw_file_test():
 	analyzer = Analyzer()
-	analyzer.feed_from_raw_file(os.path.join(here, "data/sample-raw-file.txt"))
+	analyzer.feed_from_raw_file(SAMPLE_RAW_FILENAME)
 
 	target = "Doth mother know you weareth her drapes?"
 
@@ -77,4 +83,18 @@ def feed_from_raw_file_test():
 	])
 
 	assert answer[0] == "Doth mother know you weareth her drapes?"
+
+
+def delete_files():
+	os.remove(TEST_EXPORT_FILENAME)
+
+@with_setup(None, delete_files)
+def store_test():
+	analyzer = Analyzer()
+	analyzer.feed_from_raw_file(SAMPLE_RAW_FILENAME)
+
+	analyzer.store(TEST_EXPORT_FILENAME)
+
+	with open(TEST_EXPORT_FILENAME) as export, open(SAMPLE_EXPORT_FILENAME) as sample:
+		assert export.read() == sample.read()
 
