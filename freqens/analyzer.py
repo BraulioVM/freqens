@@ -55,9 +55,14 @@ class Analyzer(object):
 		return json.dumps(content)
  
 	def store(self, filename):
+		""" Stores the json representation of the analyzer to a file """
 		with open(filename, "w") as f:
 			f.write(self.serialize())
 
+	def discard(self, chars):
+		""" Removes the chars in chars from the counter """
+		for char in chars:
+			del self.counter[char]
 
 	@classmethod
 	def load(self, filename):

@@ -107,3 +107,16 @@ def load_test():
 	analyzer.store(TEST_EXPORT_FILENAME)
 
 	assert files_equal(TEST_EXPORT_FILENAME, SAMPLE_EXPORT_FILENAME)
+
+
+def discard_test():
+	analyzer = Analyzer("aaaaaaaaabbbcccd")
+	assert analyzer.score("a") > 0
+	analyzer.discard("bcd")
+	assert analyzer.score("a") == 0
+
+	analyzer = Analyzer("abcde")
+	assert analyzer.score("dedede") > 0
+	analyzer.discard(["a", "b", "c"])
+	assert analyzer.score("dedede") == 0
+
