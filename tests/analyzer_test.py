@@ -120,3 +120,13 @@ def discard_test():
 	analyzer.discard(["a", "b", "c"])
 	assert analyzer.score("dedede") == 0
 
+
+def transform_test():
+	analyzer = Analyzer("AAaaaa")
+
+	assert analyzer.score("Aaa") == 0
+
+	analyzer.transform(lambda s: s.upper())
+
+	assert analyzer.score("Aaa") > 0
+	assert analyzer.score("A") == 0

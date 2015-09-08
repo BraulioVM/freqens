@@ -81,3 +81,22 @@ def absolute_counts_test():
 	assert len(absolute) == 3
 
 
+
+def transformation_test():
+	nc = NormalizedCounter("aA")
+
+	assert nc["a"] == 0.5
+	assert nc["A"] == 0.5
+
+	nc.transform(lambda s: s.upper())
+	assert nc["A"] == 1
+
+	
+
+	def sample_transform(s):
+		return "B" if s == "A" else s
+
+	nc2 = NormalizedCounter("AAACCCB")
+	nc2.transform(sample_transform)
+
+	assert nc2["B"] == 4./7

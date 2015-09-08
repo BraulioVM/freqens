@@ -64,6 +64,10 @@ class Analyzer(object):
 		for char in chars:
 			del self.counter[char]
 
+	def transform(self, transformation):
+		""" Maps chars to chars to get a new frequency distribution """
+		self.counter.transform(transformation)
+
 	@classmethod
 	def load(self, filename):
 		with open(filename) as f:

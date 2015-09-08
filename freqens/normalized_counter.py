@@ -30,6 +30,20 @@ class NormalizedCounter(object):
 	def absolute_counts(self):
 		return dict( self.counter )
 
+	def transform(self, transformation):
+		"""
+		Maps the character distribution to another character distribution changing the keys through
+		the transformation function provided
+
+		For example: { "a": 0.25, "A" : 0.75 } gets mapped to { "A" : 1 } with transformation = lambda s: s.upper()
+		"""
+		new_counter = Counter()
+		for key in self:
+			new_key = transformation(key)
+			new_counter[new_key] += self.counter[key]
+
+		self.counter = new_counter
+
 	def __add__(self, other):
 		""" Performs an absolute sum of two NormalizedCounters """
 		result = NormalizedCounter()
@@ -71,4 +85,3 @@ class NormalizedCounter(object):
 		result_dict = { key: self[key] for key in self.counter }
 
 		return result_dict.__str__()
-
