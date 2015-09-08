@@ -108,6 +108,13 @@ def from_file_test():
 
 	assert files_equal(TEST_EXPORT_FILENAME, SAMPLE_EXPORT_FILENAME)
 
+def load_test():
+	analyzer = Analyzer("b")
+
+	assert analyzer.score("bbbb") == 0
+	analyzer.load(relative_path("data/sample-export-simple.txt"))
+	assert analyzer.score("ab") == 0
+
 @with_setup(None, delete_files)
 def from_raw_file_test():
 	analyzer = Analyzer.from_raw_file(SAMPLE_RAW_FILENAME)
