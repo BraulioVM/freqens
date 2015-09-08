@@ -102,8 +102,15 @@ def store_test():
 	assert files_equal(TEST_EXPORT_FILENAME, SAMPLE_EXPORT_FILENAME)
 
 @with_setup(None, delete_files)
-def load_test():
-	analyzer = Analyzer.load(SAMPLE_EXPORT_FILENAME)
+def from_file_test():
+	analyzer = Analyzer.from_file(SAMPLE_EXPORT_FILENAME)
+	analyzer.store(TEST_EXPORT_FILENAME)
+
+	assert files_equal(TEST_EXPORT_FILENAME, SAMPLE_EXPORT_FILENAME)
+
+@with_setup(None, delete_files)
+def from_raw_file_test():
+	analyzer = Analyzer.from_raw_file(SAMPLE_RAW_FILENAME)
 	analyzer.store(TEST_EXPORT_FILENAME)
 
 	assert files_equal(TEST_EXPORT_FILENAME, SAMPLE_EXPORT_FILENAME)

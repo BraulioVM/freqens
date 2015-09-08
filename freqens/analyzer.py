@@ -50,6 +50,7 @@ class Analyzer(object):
 		return map(operator.itemgetter(0), heapq.nsmallest(n, scores.iteritems(), operator.itemgetter(1)))
 
 	def serialize(self):
+		""" Returns a json representation of the analyzer """
 		content = self.counter.absolute_counts()
 
 		return json.dumps(content)
@@ -58,6 +59,13 @@ class Analyzer(object):
 		""" Stores the json representation of the analyzer to a file """
 		with open(filename, "w") as f:
 			f.write(self.serialize())
+
+	def load(self, filename):
+		""" Loads a frequency distribution file and adds it to the current distribution """
+		with open(filename) as f:
+			counter = NormalizedCounter(json.loads(f.read()))
+			self.counter += counter
+
 
 	def discard(self, chars):
 		""" Removes the chars in chars from the counter """
@@ -69,9 +77,15 @@ class Analyzer(object):
 		self.counter.transform(transformation)
 
 	@classmethod
-	def load(self, filename):
-		with open(filename) as f:
-			content = json.loads(f.read())
-			analyzer = Analyzer(content)
-			return analyzer
+	def from_raw_file(self, filename):
+		analyzer = Analyzer()
+		analyzer.feed_from_raw_file(filename)
+
+		return analyzer
+
+	@classmethod
+	def from_file(self, filename):
+		analyzer = Analyzer()
+		analyzer.load(filename)
+		return analyzer
 		
