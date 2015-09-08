@@ -20,7 +20,11 @@ def basic_test():
 	assert nc["a"] == 0
 	assert nc["b"] == 1./3
 
-
+def dictionary_constructor_test():
+	nc = NormalizedCounter({ "a": 4, "b": 3 })
+	
+	assert nc["a"] == 4./7
+	assert nc["b"] == 3./7
 
 def elements_test():
 	nc = NormalizedCounter()

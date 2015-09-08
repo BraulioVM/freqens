@@ -14,8 +14,9 @@ class NormalizedCounter(object):
 
 		:param content: the string from which the counter will be initially constructed
 		"""
-		self.absolute_size = len(content) if content is not None else 0
+
 		self.counter = Counter(content)
+		self.absolute_size = calculate_counter_size(self.counter)
 
 	def most_common(self, n = None):
 		pass
