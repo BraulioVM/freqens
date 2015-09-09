@@ -6,6 +6,7 @@ here = os.path.dirname(os.path.abspath(__file__))
 relative_path = lambda s: os.path.join(here, s)
 
 def counter_distance(counter1, counter2):
+	""" Euclidean distance on the frequency distribution space """
 	keys = set( chain(counter1.elements(), counter2.elements()) ) 
 
 	return sum( (counter1[key] - counter2[key])**2 for key in keys )
@@ -38,6 +39,9 @@ class Analyzer(object):
 			self.feed(content)
 
 	def score(self, content):
+		"""
+		Assigns a score to any string. The smaller, the more similar frequency distribution
+		"""
 		new_counter = NormalizedCounter()
 		new_counter.insert(content)
 
@@ -80,10 +84,12 @@ class Analyzer(object):
 		self.counter.transform(transformation)
 
 	def keys(self):
+		""" Returns the characters whose frequency is greater than 0 """
 		return self.counter.elements()
 
 	@classmethod
 	def from_raw_file(self, filename):
+		""" Returns an analyzer whose frequency distribution is read from the file content """
 		analyzer = Analyzer()
 		analyzer.feed_from_raw_file(filename)
 
@@ -91,12 +97,14 @@ class Analyzer(object):
 
 	@classmethod
 	def from_file(self, filename):
+		""" Reads a frequency distribution from a JSON file as stored by store method """
 		analyzer = Analyzer()
 		analyzer.load(filename)
 		return analyzer
 		
 
 class EnglishAnalyzer(Analyzer):
+	""" An analyzer for the english language """
 	def __init__(self, blank_spaces=True, case_sensitive=True, just_alpha=False):
 		super(EnglishAnalyzer, self).__init__()
 
