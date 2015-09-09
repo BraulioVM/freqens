@@ -19,7 +19,9 @@ class NormalizedCounter(object):
 		self.absolute_size = calculate_counter_size(self.counter)
 
 	def most_common(self, n = None):
-		pass
+		most_common_abs = self.counter.most_common(n)
+
+		return [ (char, 1.*freq / self.absolute_size ) for (char, freq) in most_common_abs ]
 
 	def elements(self):
 		return self.counter.iterkeys()

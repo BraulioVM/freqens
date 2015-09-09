@@ -41,6 +41,18 @@ def elements_test():
 	nc.insert("argaoergiajrg")
 	assert sum( nc[key] for key in nc.elements() ) == 1
 
+def most_common_test():
+	nc = NormalizedCounter({"a": 8, "b": 4, "c": 2})
+
+	most_common = nc.most_common()
+
+	assert most_common == [
+		("a", 8./14),
+		("b", 4./14),
+		("c", 2./14)
+	]
+
+
 def iterable_test():
 	nc = NormalizedCounter()
 	nc.insert("fgaijogarjgaorigjarogijarogiar!)")
