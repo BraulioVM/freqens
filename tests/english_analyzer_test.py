@@ -17,4 +17,21 @@ def basic_test():
 
 	# just alpha symbols
 	assert all( c.isalpha() or c == " " for c in analyzer_ja.keys() )
+
+
+def single_byte_xor(text, byte):
+	return "".join( chr(char ^ byte) for char in bytearray(text) )
+
+def choose_best_test():
+	analyzer = EnglishAnalyzer()
+	secret_password = 23
+	plaintext = "A dyslexic man walks into a bra."
+	ciphertext = single_byte_xor(plaintext, 23)
+
+	potential_plaintexts = ( single_byte_xor(ciphertext, i) for i in range(255) )
+
+	assert analyzer.choose_best(potential_plaintexts)[0] == plaintext
+
+
+
 	
