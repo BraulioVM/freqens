@@ -1,6 +1,9 @@
 from freqens.normalized_counter import NormalizedCounter
 from itertools import chain
-import heapq, operator, json
+import heapq, operator, json, os
+
+here = os.path.dirname(os.path.abspath(__file__))
+relative_path = lambda s: os.path.join(here, s)
 
 def counter_distance(counter1, counter2):
 	keys = set( chain(counter1.elements(), counter2.elements()) ) 
@@ -76,6 +79,9 @@ class Analyzer(object):
 		""" Maps chars to chars to get a new frequency distribution """
 		self.counter.transform(transformation)
 
+	def keys(self):
+		return self.counter.elements()
+
 	@classmethod
 	def from_raw_file(self, filename):
 		analyzer = Analyzer()
@@ -89,3 +95,28 @@ class Analyzer(object):
 		analyzer.load(filename)
 		return analyzer
 		
+
+class EnglishAnalyzer(Analyzer):
+	def __init__(self, blank_spaces=True, case_sensitive=True, just_alpha=False):
+		super(EnglishAnalyzer, self).__init__()
+
+		self.load(relative_path("data/english-export.txt"))
+
+		if not blank_spaces:
+			self.discard([" ", "\t"])
+
+		self.case_sensitive = case_sensitive
+		if not case_sensitive:
+			self.transform(lambda s: s.lower())
+
+		if just_alpha:
+			valid_symbol = lambda c: c.isalpha() or c == " "
+			symbols_to_discard = [ key for key in self.keys() if not valid_symbol(key) ]
+			self.discard(symbols_to_discard)
+
+
+	def score(self, content):
+		if not self.case_sensitive:
+			content = content.lower()
+
+		return super(EnglishAnalyzer, self).score(content)
