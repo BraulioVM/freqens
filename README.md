@@ -23,7 +23,7 @@ with open("ciphertext.txt") as ciphertext_file:
 
 ````
 ### Getting Started
-*Coming soon*
+Get started [here](http://freqens.readthedocs.org/en/latest/tutorial.html)
 
 ### Documentation
-*Coming soon*
+Read them at [readthedocs](http://freqens.readthedocs.org/en/latest/)
