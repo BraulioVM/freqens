@@ -35,7 +35,7 @@ to score strings based on how legit they seem (how similar its frequency distrib
 * From a raw file: you can build an analyzer like
 	.. code-block:: python
 
-		from freqens import Analyzer
+		from freqens.analyzer import Analyzer
 
 		# a representative sample of the target frequency distribution 
 		# ie. a normal brainfuck program
@@ -54,7 +54,7 @@ to score strings based on how legit they seem (how similar its frequency distrib
 	This is how you build an analyzer from one of these files:
 		.. code-block:: python
 
-			from freqens import Analyzer
+			from freqens.analyzer import Analyzer
 
 			filename = "./bf-distribution.json"
 			analyzer = Analyzer.from_file(filename)
@@ -62,7 +62,7 @@ to score strings based on how legit they seem (how similar its frequency distrib
 * From a string:
 	.. code-block:: python
 
-		from freqens import Analyzer
+		from freqens.analyzer import Analyzer
 
 		analyzer = Analyzer("representative text")
 
@@ -80,7 +80,7 @@ Now that you know how to get a brainfuck analyzer, it's time to break the code. 
 
 .. code-block:: python
 
-	from freqens import Analyzer
+	from freqens.analyzer import Analyzer
 
 	def single_byte_xor(text, byte):
 		return "".join( chr(c ^ byte) for c in bytearray(text) )

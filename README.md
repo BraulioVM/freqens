@@ -2,11 +2,16 @@
 ![TravisCI Status](https://magnum.travis-ci.com/BraulioVM/freqens.svg?token=qKkPGCZvRdJvJ693qC2L)
 > Perform frequency analysis with python
 
+### Installation
+````
+pip install freqens
+````
+
 ### Example
 ````python
 # break single byte xor encryption
 
-from freqens import EnglishAnalyzer
+from freqens.analyzer import EnglishAnalyzer
 
 def single_byte_xor(text, byte):
 	return "".join( chr(c ^ byte) for c in bytearray(text) )
