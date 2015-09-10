@@ -135,12 +135,12 @@ def discard_test():
 	assert analyzer.score("dedede") == 0
 
 
-def transform_test():
+def transform_keys_test():
 	analyzer = Analyzer("AAaaaa")
 
 	assert analyzer.score("Aaa") == 0
 
-	analyzer.transform(lambda s: s.upper())
+	analyzer.transform_keys(lambda s: s.upper())
 
 	assert analyzer.score("Aaa") > 0
 	assert analyzer.score("A") == 0

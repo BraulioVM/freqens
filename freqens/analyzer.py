@@ -1,3 +1,13 @@
+"""
+This module contains two classes:
+	* Analyzer: a generic analyzer. It can be fed both from text strings and from files. \
+		You can also store a representation of the state of the analyzer to be retrieved later, with the \
+		``from_file`` class method or the ``load`` method.
+
+	* EnglishAnalyzer: an special analyzer for the English language. 
+
+
+"""
 from freqens.normalized_counter import NormalizedCounter
 from itertools import chain
 import heapq, operator, json, os
@@ -14,10 +24,16 @@ def counter_distance(counter1, counter2):
 class Analyzer(object):
 	""" 
 	The class that performs the analysis. 
-	You can feed an analyzer from different sources (strings, files... ) and ask
+	You can feed an analyzer from different sources (strings, files... ) so that
+	it extracts the target frequency distribution and ask
 	it to score supplied content based on frequency similarity
 	"""
 	def __init__(self, content = None):
+		""" Build an analyzer
+
+		Content can be a string or a dict with absolute frequencies like in:
+		`` Analyzer({"a": 4, "b": 8, "c": 1}) ``
+		"""
 		self.counter = NormalizedCounter(content)
 
 	def feed(self, content):
@@ -28,11 +44,10 @@ class Analyzer(object):
 		self.counter.insert(content)
 
 	def feed_from_raw_file(self, filename):
-		""" 
-		Feeds the analyzer with the content of a file
-		Every character will be taken into account, including newline chars.
+		""" Feeds the analyzer with the content of a file
+			Every character will be taken into account, including newline chars.
 
-		:param filename: the path of the file that will be fed to the analyzer
+			:param filename: the path of the file that will be fed to the analyzer
 		"""
 		with open(filename) as f:
 			content = f.read()
@@ -40,7 +55,13 @@ class Analyzer(object):
 
 	def score(self, content):
 		"""
-		Assigns a score to any string. The smaller, the more similar frequency distribution
+		Assigns a score to any string. The smaller, the more similar frequency distribution. \
+		0 means that the frequency distributions of both the content and the analyzer are equal.
+
+		:param content: the string to be scored.
+
+		:returns: a float number
+
 		"""
 		new_counter = NormalizedCounter()
 		new_counter.insert(content)
@@ -50,14 +71,24 @@ class Analyzer(object):
 	def choose_best(self, strings, n=1):
 		""" 
 		Returns the n strings whose frequency distribution is most similar
-		to the one fed to the analyzer
+		to the one fed to the analyzer.
+
+		:param strings: an iterator with the strings where the Analyzer will looked for the 
+			best strings.
+		:param n: an integer specifying the number of strings which will be returned.
+
+		:returns: an iterable containing the ``n`` best strings sorted by frequency similarity
+
 		"""
 		scores = { string: self.score(string) for string in strings }
 
 		return map(operator.itemgetter(0), heapq.nsmallest(n, scores.iteritems(), operator.itemgetter(1)))
 
 	def serialize(self):
-		""" Returns a json representation of the analyzer """
+		""" Returns a json representation of the analyzer 
+
+		:returns: a string containing a json representation of the absolute frequencies
+			the analyzer has been fed with."""
 		content = self.counter.absolute_counts()
 
 		return json.dumps(content)
@@ -75,12 +106,23 @@ class Analyzer(object):
 
 
 	def discard(self, chars):
-		""" Removes the chars in chars from the counter """
+		""" Removes the chars in chars from the counter
+
+			:param chars: an interable consisting of the chars \
+				whose frequency will be set to 0
+
+		"""
 		for char in chars:
 			del self.counter[char]
 
-	def transform(self, transformation):
-		""" Maps chars to chars to get a new frequency distribution """
+	def transform_keys(self, transformation):
+		""" Maps the keys to other new keys to get a new frequency distribution
+
+
+			The relative frequency of keys that map to the same key will be added in 
+			order to get the new frequency distribution.
+
+			:param transformation: a callable object that maps chars to chars"""
 		self.counter.transform(transformation)
 
 	def keys(self):
@@ -115,7 +157,7 @@ class EnglishAnalyzer(Analyzer):
 
 		self.case_sensitive = case_sensitive
 		if not case_sensitive:
-			self.transform(lambda s: s.lower())
+			self.transform_keys(lambda s: s.lower())
 
 		if just_alpha:
 			valid_symbol = lambda c: c.isalpha() or c == " "

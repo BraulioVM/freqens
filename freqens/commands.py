@@ -1,9 +1,13 @@
-import glob, sys
+import glob, sys, operator
 from freqens.analyzer import Analyzer
+
+
+def get_files_matching_patterns(patterns):
+	return reduce(operator.add, (glob.glob(pattern) for pattern in patterns), [])
 
 def main():
 	patterns = sys.argv[1:]
-	files = reduce(lambda x, b: x + b, (glob.glob(pattern) for pattern in patterns), [])
+	files = get_files_matching_patterns(patterns)
 
 	analyzer = Analyzer()
 

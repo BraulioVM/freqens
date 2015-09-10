@@ -11,6 +11,9 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   Getting Started Tutorial <tutorial>
+   Analyzer Module Reference <analyzer>
+
 
 
 Indices and tables
