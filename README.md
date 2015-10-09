@@ -1,5 +1,5 @@
 # Freqens
-![TravisCI Status](https://magnum.travis-ci.com/BraulioVM/freqens.svg?token=qKkPGCZvRdJvJ693qC2L)
+![TravisCI Status](https://travis-ci.org/BraulioVM/freqens.svg)
 > Perform frequency analysis with python
 
 ### Installation
